@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structural Engineer &mdash; Constructive Building Consultants</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#0F1318;
+ --bg2:#151C26;
+ --bg3:#1A2030;
+ --red:#9B002D;
+ --red2:#C4003A;
+ --blue-dim:rgba(155,0,45,0.15);
+ --white:#F5F0EF;
+ --offwhite:#EEF4FA;
+ --mid:#B8C8D8;
+ --dim:#1A2235;
+ --warm:#EDE5E5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
+#cur{position:fixed;width:9px;height:9px;background:var(--red2);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;}
+#cur-r{position:fixed;width:32px;height:32px;border:1px solid rgba(155,0,45,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;}
+
+/* NOISE */
+.noise{position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9000;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 80px 80px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 50% at 85% 30%,rgba(100,0,30,0.12),transparent 65%),radial-gradient(ellipse 50% 70% at 5% 100%,rgba(20,5,10,0.3),transparent 60%),var(--bg);}
+.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(100,0,30,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(100,0,30,0.04) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+.hero-inner{position:relative;z-index:10;max-width:920px;}
+.pre-tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.35em;color:var(--red2);text-transform:uppercase;margin-bottom:28px;opacity:0;animation:up .8s ease forwards .25s;}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,10vw,138px);line-height:0.92;letter-spacing:0.02em;opacity:0;animation:up .8s ease forwards .4s;}
+.hero-name span{color:var(--red2);}
+.hero-sub{font-size:19px;line-height:1.65;color:var(--mid);max-width:620px;margin:28px 0 48px;opacity:0;animation:up .8s ease forwards .58s;}
+.hero-sub strong{color:var(--white);font-weight:500;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:12px;opacity:0;animation:up .8s ease forwards .78s;}
+.chip{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;padding:10px 20px;border:1px solid rgba(155,0,45,0.3);color:var(--red2);border-radius:2px;}
+.chip.warm{border-color:rgba(212,196,196,0.3);color:var(--warm);}
+.chip.mid{border-color:rgba(138,112,112,0.4);color:var(--mid);}
+.scroll-hint{position:absolute;bottom:40px;left:80px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeIn 1s ease forwards 1.2s;z-index:10;}
+.scroll-hint span{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--mid);}
+.s-line{width:40px;height:1px;background:linear-gradient(90deg,var(--red2),transparent);}
+
+/* SECTIONS */
+section{padding:90px 80px;position:relative;}
+.sec-inner{max-width:1100px;margin:0 auto;}
+.sec-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--red2);margin-bottom:14px;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,5vw,68px);line-height:0.93;letter-spacing:0.02em;margin-bottom:18px;}
+.sec-intro{font-size:16px;line-height:1.78;color:var(--mid);max-width:580px;margin-bottom:50px;}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(90deg,var(--red),transparent);width:100%;max-width:1100px;margin:0 auto;}
+
+/* ABOUT */
+.about-sec{background:var(--bg2);}
+.about-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:70px;align-items:start;}
+.about-body{font-size:15px;line-height:1.82;color:var(--mid);}
+.about-body p{margin-bottom:18px;}
+.about-body p:last-child{margin-bottom:0;}
+.about-body strong{color:var(--white);font-weight:500;}
+.stat-stack{display:flex;flex-direction:column;gap:2px;}
+.stat-block{background:var(--bg);padding:28px 32px;position:relative;overflow:hidden;}
+.stat-block::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px;background:var(--red);}
+.stat-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--mid);margin-bottom:6px;}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--red2);line-height:1;margin-bottom:4px;}
+.stat-val.warm{color:var(--warm);}
+.stat-desc{font-size:13px;line-height:1.62;color:var(--mid);}
+
+/* ROLE */
+.role-sec{background:var(--bg);}
+.role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:rgba(255,255,255,0.03);}
+.role-card{background:var(--bg2);padding:36px 30px;position:relative;overflow:hidden;transition:background .3s;}
+.role-card:hover{background:rgba(100,0,30,0.07);}
+.role-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(100,0,30,0.07);position:absolute;top:10px;right:14px;line-height:1;}
+.role-icon{font-size:26px;margin-bottom:14px;}
+.role-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:0.03em;margin-bottom:10px;}
+.role-body{font-size:13px;line-height:1.74;color:var(--mid);}
+
+/* PHASES */
+.phase-sec{background:var(--bg);}
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,0.03);}
+.phase{background:var(--bg2);padding:40px 32px;position:relative;cursor:none;transition:background .3s;}
+.phase:hover{background:rgba(100,0,30,0.07);}
+.phase::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1);}
+.phase:hover::after{transform:scaleX(1);}
+.phase-num{font-family:'Bebas Neue',sans-serif;font-size:72px;color:rgba(100,0,30,0.07);line-height:1;position:absolute;top:14px;right:18px;}
+.phase-period{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--red2);margin-bottom:14px;}
+.phase-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.03em;margin-bottom:12px;}
+.phase-body{font-size:14px;line-height:1.74;color:var(--mid);}
+
+/* PACKAGE */
+.package-sec{background:var(--bg3);}
+.pack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.pack-card{border:1px solid rgba(255,255,255,0.05);padding:36px;position:relative;overflow:hidden;cursor:none;transition:border-color .3s,background .3s;}
+.pack-card:hover{border-color:rgba(155,0,45,0.35);background:rgba(100,0,30,0.05);}
+.pack-card.wide{grid-column:span 2;}
+.pack-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s ease;}
+.pack-card:hover::before{transform:scaleX(1);}
+.pack-icon{font-size:30px;margin-bottom:18px;}
+.pack-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+.pack-value{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--red2);line-height:1;margin-bottom:8px;}
+.pack-value.warm{color:var(--warm);}
+.pack-desc{font-size:14px;line-height:1.72;color:var(--mid);}
+.pack-detail{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.16,1,.3,1);}
+.pack-card.open .pack-detail{max-height:320px;}
+.pack-detail-inner{padding-top:20px;border-top:1px solid rgba(255,255,255,0.05);margin-top:20px;font-size:14px;line-height:1.8;color:var(--mid);}
+.expand-hint{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(155,0,45,0.35);margin-top:16px;transition:color .2s;}
+.pack-card:hover .expand-hint{color:var(--red2);}
+
+/* WHY */
+.why-sec{background:var(--bg);}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,0.03);}
+.why-card{background:var(--bg2);padding:36px 30px;cursor:none;position:relative;overflow:hidden;transition:background .3s;}
+.why-card:hover{background:rgba(100,0,30,0.07);}
+.why-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(100,0,30,0.07);position:absolute;top:10px;right:14px;line-height:1;}
+.why-icon{font-size:26px;margin-bottom:14px;}
+.why-title{font-family:'Bebas Neue',sans-serif;font-size:25px;letter-spacing:0.03em;margin-bottom:10px;}
+.why-body{font-size:13px;line-height:1.74;color:var(--mid);}
+
+/* CTA */
+.cta-sec{background:var(--red);text-align:center;padding:100px 80px;position:relative;overflow:hidden;}
+.cta-sec::before{content:'CBC';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:340px;color:rgba(0,0,0,0.08);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,7vw,88px);color:var(--white);line-height:0.92;margin-bottom:22px;position:relative;z-index:2;}
+.cta-body{font-size:17px;color:rgba(245,240,239,0.65);max-width:500px;margin:0 auto 38px;line-height:1.67;position:relative;z-index:2;}
+.cta-sig{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,239,0.45);position:relative;z-index:2;}
+.cta-contact{margin-top:32px;position:relative;z-index:2;}
+.cta-btn{display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--white);border:1px solid rgba(255,255,255,0.4);padding:16px 40px;text-decoration:none;transition:background .3s,border-color .3s;}
+.cta-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.7);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@keyframes up{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+@media(max-width:900px){
+ section.hero{padding:60px 24px;}
+ section{padding:60px 24px;}
+ .phases,.pack-grid,.why-grid,.about-grid,.role-grid{grid-template-columns:1fr;}
+ .pack-card.wide{grid-column:span 1;}
+ .hero-name{font-size:clamp(56px,12vw,100px);}
+}
+</style>
+</head>
+<body>
+
+<div style="position:fixed;top:24px;left:32px;z-index:1000;">
+  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICB2ZXJzaW9uPSIxLjEiCiAgIGlkPSJzdmcyIgogICB4bWw6c3BhY2U9InByZXNlcnZlIgogICB3aWR0aD0iMTUxMS44MTM0IgogICBoZWlnaHQ9IjExMjIuNTIiCiAgIHZpZXdCb3g9IjAgMCAxNTExLjgxMzQgMTEyMi41MiIKICAgc29kaXBvZGk6ZG9jbmFtZT0iQ0JDIEZJTkFMIExvZ28gKyBUZXh0IFdISVRFLnN2ZyIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMC45Mi4zICgyNDA1NTQ2LCAyMDE4LTAzLTExKSI+PG1ldGFkYXRhCiAgICAgaWQ9Im1ldGFkYXRhOCI+PHJkZjpSREY+PGNjOldvcmsKICAgICAgICAgcmRmOmFib3V0PSIiPjxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PjxkYzp0eXBlCiAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz48ZGM6dGl0bGU+PC9kYzp0aXRsZT48L2NjOldvcms+PC9yZGY6UkRGPjwvbWV0YWRhdGE+PGRlZnMKICAgICBpZD0iZGVmczYiPjxjbGlwUGF0aAogICAgICAgY2xpcFBhdGhVbml0cz0idXNlclNwYWNlT25Vc2UiCiAgICAgICBpZD0iY2xpcFBhdGgxOCI+PHBhdGgKICAgICAgICAgZD0iTSAwLDg0MS44OSBIIDExMzMuODYgViAwIEggMCBaIgogICAgICAgICBpZD0icGF0aDE2IgogICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPjwvY2xpcFBhdGg+PC9kZWZzPjxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBwYWdlY29sb3I9IiM1NTU1NTEiCiAgICAgYm9yZGVyY29sb3I9IiM2NjY2NjYiCiAgICAgYm9yZGVyb3BhY2l0eT0iMSIKICAgICBvYmplY3R0b2xlcmFuY2U9IjEwIgogICAgIGdyaWR0b2xlcmFuY2U9IjEwIgogICAgIGd1aWRldG9sZXJhbmNlPSIxMCIKICAgICBpbmtzY2FwZTpwYWdlb3BhY2l0eT0iMCIKICAgICBpbmtzY2FwZTpwYWdlc2hhZG93PSIyIgogICAgIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMTkyMCIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSIxMDE3IgogICAgIGlkPSJuYW1lZHZpZXc0IgogICAgIHNob3dncmlkPSJmYWxzZSIKICAgICBpbmtzY2FwZTp6b29tPSIxIgogICAgIGlua3NjYXBlOmN4PSI3NDUuOTU2NCIKICAgICBpbmtzY2FwZTpjeT0iNTc2LjYyNjY4IgogICAgIGlua3NjYXBlOndpbmRvdy14PSIxOTEyIgogICAgIGlua3NjYXBlOndpbmRvdy15PSItOCIKICAgICBpbmtzY2FwZTp3aW5kb3ctbWF4aW1pemVkPSIxIgogICAgIGlua3NjYXBlOmN1cnJlbnQtbGF5ZXI9ImcxNCIKICAgICBzaG93Z3VpZGVzPSJ0cnVlIgogICAgIHNob3dib3JkZXI9ImZhbHNlIiAvPjxnCiAgICAgaWQ9ImcxMCIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlua3NjYXBlOmxhYmVsPSJDQkMgRklOQUwgTG9nbyBNQVNURVJTIgogICAgIHRyYW5zZm9ybT0ibWF0cml4KDEuMzMzMzMzMywwLDAsLTEuMzMzMzMzMywwLDExMjIuNTIpIj48ZwogICAgICAgaWQ9ImcxMiI+PGcKICAgICAgICAgaWQ9ImcxNCIKICAgICAgICAgY2xpcC1wYXRoPSJ1cmwoI2NsaXBQYXRoMTgpIj48ZwogICAgICAgICAgIGlkPSJnMjAiCiAgICAgICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQ3LjA1MjIsNDIxLjYyMTEpIj48cGF0aAogICAgICAgICAgICAgZD0iTSAwLDAgSCAtMC4wMDggViAtMC42NzcgQyAtMC4wMDgsLTAuNDUgLTAuMDAxLC0wLjIyNyAwLDAiCiAgICAgICAgICAgICBzdHlsZT0iZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO2ZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpub25lIgogICAgICAgICAgICAgaWQ9InBhdGgyMiIKICAgICAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiIC8+PC9nPjxnCiAgICAgICAgICAgaWQ9ImcyNCIKICAgICAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOTguNjg0Niw1NDMuMDMxNykiPjxwYXRoCiAgICAgICAgICAgICBkPSJNIDAsMCBDIC0zMS4yNzgsMzEuMjc4IC03NC40NjMsNTAuNjUxIC0xMjIuMDg3LDUwLjY1MSBWIDcuNDY3IGMgMzUuNzE5LDAgNjguMTA2LC0xNC41MyA5MS41NjYsLTM3Ljk4OCB6IgogICAgICAgICAgICAgc3R5bGU9ImZpbGw6IzliMDAyZDtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZSIKICAgICAgICAgICAgIGlkPSJwYXRoMjYiCiAgICAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPjwvZz48ZwogICAgICAgICAgIGlkPSJnMjgiCiAgICAgICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzk4LjY2NywyOTguODc1KSI+PHBhdGgKICAgICAgICAgICAgIGQ9Ik0gMCwwIC0zMC41MDQsMzAuNTAzIEMgLTUzLjk2Myw3LjA0NSAtODYuMzUyLC03LjQ4NCAtMTIyLjA3LC03LjQ4NCBjIC03MS40MzUsMCAtMTI5LjU1Myw1OC4xMTcgLTEyOS41NTMsMTI5LjU1NCAwLDM4LjI3OSAxNi43MDEsNzIuNzIxIDQzLjE4NSw5Ni40NTkgdiAwLjAxNCA1My4wMjYgYyAtMTYuMjUxLC05LjQyNSAtMzAuODMsLTIxLjQyMyAtNDMuMTg1LC0zNS40MjcgdiAwLjA0OSBjIC0wLjgxNCwtMC45MjIgLTEuNTg2LC0xLjg4IC0yLjM4LC0yLjgyIC0wLjQyOSwtMC41MDYgLTAuODU5LC0xLjAwOSAtMS4yODIsLTEuNTE5IC0wLjg3NywtMS4wNjIgLTEuNzM5LC0yLjEzNSAtMi41ODksLTMuMjE4IC0wLjUxNCwtMC42NSAtMS4wMTYsLTEuMzA5IC0xLjUyLC0xLjk2NyAtMS4wMywtMS4zNTEgLTIuMDQ2LC0yLjcxMSAtMy4wMzYsLTQuMDkyIC0wLjg3NSwtMS4yMTYgLTEuNzQ1LC0yLjQzNiAtMi41ODcsLTMuNjc1IC0wLjY2LC0wLjk3MiAtMS4yOTUsLTEuOTYxIC0xLjkzNywtMi45NDYgLTAuNTg2LC0wLjkwMSAtMS4xNjgsLTEuODA1IC0xLjczNywtMi43MTcgLTAuNjAzLC0wLjk2NSAtMS4yMDEsLTEuOTM0IC0xLjc4NCwtMi45MTMgLTAuNjQzLC0xLjA3NyAtMS4yNjcsLTIuMTY2IC0xLjg4NywtMy4yNTggLTAuNjIxLC0xLjA5MyAtMS4yMzksLTIuMTg3IC0xLjgzNywtMy4yOTUgLTAuODI2LC0xLjUzMSAtMS42MzQsLTMuMDc0IC0yLjQxNSwtNC42MzIgLTAuNDMsLTAuODU4IC0wLjg0MSwtMS43MjQgLTEuMjU3LC0yLjU5IC0wLjU5NCwtMS4yMzYgLTEuMTc0LC0yLjQ4MSAtMS43NCwtMy43MzMgLTAuMzc3LC0wLjgzOSAtMC43NTgsLTEuNjc2IC0xLjEyMywtMi41MjEgLTAuNzk2LC0xLjg0MiAtMS41NjUsLTMuNyAtMi4yOTgsLTUuNTc2IC0wLjI0MiwtMC42MTggLTAuNDcyLC0xLjI0NCAtMC43MDcsLTEuODY3IC0wLjYyOCwtMS42NjYgLTEuMjM0LC0zLjM0MiAtMS44MTMsLTUuMDMgLTAuMjY3LC0wLjc4MSAtMC41MjMsLTEuNTY2IC0wLjc3OSwtMi4zNSAtMC41MDcsLTEuNTU1IC0wLjk5LC0zLjExOCAtMS40NTUsLTQuNjkyIC0wLjE5NywtMC42NzQgLTAuNDA1LC0xLjM0NCAtMC41OTUsLTIuMDIxIC0wLjYxMywtMi4xNzggLTEuMTg3LC00LjM3IC0xLjcxNSwtNi41ODIgLTAuMTMyLC0wLjU1MSAtMC4yNDcsLTEuMTA4IC0wLjM3MiwtMS42NiAtMC40MDQsLTEuNzY3IC0wLjc4MSwtMy41NDMgLTEuMTI5LC01LjMzIC0wLjE0MywtMC43MyAtMC4yODMsLTEuNDYxIC0wLjQxNiwtMi4xOTQgLTAuMzQ0LC0xLjg5OSAtMC42NTcsLTMuODA2IC0wLjkzOSwtNS43MjMgLTAuMDY1LC0wLjQ0NiAtMC4xNDQsLTAuODg5IC0wLjIwNiwtMS4zMzYgLTAuMzIzLC0yLjMzMiAtMC41OTMsLTQuNjgyIC0wLjgyMywtNy4wNDMgLTAuMDYxLC0wLjYzMSAtMC4xMDgsLTEuMjY3IC0wLjE2MiwtMS45MDEgLTAuMTU4LC0xLjgzMyAtMC4yODcsLTMuNjc0IC0wLjM4OCwtNS41MjEgLTAuMDM3LC0wLjcgLTAuMDc2LC0xLjM5OSAtMC4xMDYsLTIuMSAtMC4xMDIsLTIuNDIzIC0wLjE3MSwtNC44NTMgLTAuMTcxLC03LjI5OSAwLC0yLjg2MSAwLjA3OSwtNS43MDMgMC4yMTcsLTguNTMgMC4wNDYsLTAuOTQ2IDAuMTM2LC0xLjg4MSAwLjE5NywtMi44MjMgMC4xMjIsLTEuODcgMC4yNDUsLTMuNzQgMC40MjcsLTUuNTk2IDAuMTExLC0xLjEyMyAwLjI2LC0yLjIzMyAwLjM5MiwtMy4zNTEgMC4xOTYsLTEuNjU3IDAuMzksLTMuMzEzIDAuNjMyLC00Ljk1NSAwLjE3NSwtMS4xODUgMC4zODIsLTIuMzU4IDAuNTgxLC0zLjUzNSAwLjI2MSwtMS41NTEgMC41MjcsLTMuMTAxIDAuODMsLTQuNjM5IDAuMjM4LC0xLjIxMyAwLjUwNCwtMi40MTYgMC43NjcsLTMuNjIgMC4zMjUsLTEuNDc5IDAuNjYsLTIuOTUzIDEuMDIyLC00LjQxNyAwLjMwMywtMS4yMjIgMC42MjMsLTIuNDM3IDAuOTUxLC0zLjY0OCAwLjM4NSwtMS40MjMgMC43ODcsLTIuODM5IDEuMjA4LC00LjI0NyAwLjM2NSwtMS4yMTkgMC43MzgsLTIuNDMzIDEuMTI5LC0zLjY0IDAuNDQzLC0xLjM3NCAwLjkxMSwtMi43MzYgMS4zODgsLTQuMDk0IDAuNDI1LC0xLjIxMSAwLjg1MywtMi40MjEgMS4zMDQsLTMuNjIxIDAuNSwtMS4zMjQgMS4wMjcsLTIuNjM0IDEuNTU5LC0zLjk0NCAwLjQ4NSwtMS4yIDAuOTY2LC0yLjQwMiAxLjQ3OCwtMy41ODggMC41NTMsLTEuMjc5IDEuMTM5LC0yLjUzOCAxLjcyMSwtMy44IDAuNTQ3LC0xLjE4NCAxLjA4MSwtMi4zNzYgMS42NTMsLTMuNTQ2IDAuNTk5LC0xLjIyOCAxLjIzOCwtMi40MyAxLjg2NywtMy42NCAwLjYwOCwtMS4xNzQgMS4xOTcsLTIuMzU3IDEuODMyLC0zLjUxNSAwLjYzNSwtMS4xNTggMS4zMTUsLTIuMjg4IDEuOTc1LC0zLjQzIDEuNDA1LC0yLjQyOCAyLjg2NCwtNC44MTcgNC4zOCwtNy4xNjggMC41OTEsLTAuOTE4IDEuMTYxLC0xLjg1MSAxLjc2OSwtMi43NTcgMC44MzMsLTEuMjM5IDEuNzEzLC0yLjQ0NSAyLjU3NywtMy42NjEgMC42NywtMC45NDUgMS4zMjUsLTEuOSAyLjAxMywtMi44MjggMC44ODMsLTEuMTkzIDEuODAzLC0yLjM1MiAyLjcxNSwtMy41MiAwLjcxOCwtMC45MTggMS40MjYsLTEuODQ0IDIuMTYsLTIuNzQ3IDAuOTM0LC0xLjE0NyAxLjg5OCwtMi4yNjcgMi44NiwtMy4zOSAwLjUzMiwtMC42MiAxLjA0MSwtMS4yNiAxLjU4MSwtMS44NzMgdiAwLjA0OSBjIDMxLjY3OCwtMzUuOTMzIDc3Ljk5OCwtNTguNjY0IDEyOS41NTMsLTU4LjY2NCA0Ny42MjUsMCA5MC43OTIsMTkuMzg5IDEyMi4wNyw1MC42NjgiCiAgICAgICAgICAgICBzdHlsZT0iZmlsbDojOWIwMDJkO2ZpbGwtb3BhY2l0eToxO2ZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpub25lIgogICAgICAgICAgICAgaWQ9InBhdGgzMCIKICAgICAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiIC8+PC9nPjxnCiAgICAgICAgICAgaWQ9ImczMiIKICAgICAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOTAuMjI4NSw0MjAuMjY3NikiCiAgICAgICAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MSI+PHBhdGgKICAgICAgICAgICAgIGQ9Im0gMCwwIGggMC4wMTcgYyAwLjM2OCwtNDcuMzEzIDM4Ljk1NSwtODUuNjkyIDg2LjM1MywtODUuNjkyIDQ3LjYyMywwIDg2LjM2OCwzOC43NDUgODYuMzY4LDg2LjM2OSAwLDQ3LjYyMyAtMzguNzQ1LDg2LjM2OCAtODYuMzY4LDg2LjM2OCAtMTUuNzI3LDAgLTMwLjQ3MSwtNC4yNDUgLTQzLjE4NSwtMTEuNjE4IFYgMTY3Ljk1IEMgMjcuODY4LDE2My45OTMgMTMuMzcsMTU3Ljk3OSAwLDE1MC4yMjcgViA5Ny4xNSBaIG0gODYuMzcsNDMuODYyIGMgMjMuODUsMCA0My4xODMsLTE5LjMzNSA0My4xODMsLTQzLjE4NSAwLC0yMy44NSAtMTkuMzMzLC00My4xODUgLTQzLjE4MywtNDMuMTg1IC0yMy44NSwwIC00My4xODUsMTkuMzM1IC00My4xODUsNDMuMTg1IDAsMjMuODUgMTkuMzM1LDQzLjE4NSA0My4xODUsNDMuMTg1IgogICAgICAgICAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZSIKICAgICAgICAgICAgIGlkPSJwYXRoMzQiCiAgICAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPjwvZz48ZwogICAgICAgICAgIGlkPSJnMzYiCiAgICAgICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDM3LjEwNSwzMjAuODk2NSkiCiAgICAgICAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZiI+PHBhdGgKICAgICAgICAgICAgIGQ9Ik0gMCwwIEMgOS42NzksMCAxNS43NzUsMy43MzUgMjEuMzM4LDkuMzc0IEwgMTcuMzc1LDEzLjI2IEMgMTIuMjcsOC4zODQgNy40NjgsNS41NjMgMC4xNTIsNS41NjMgLTExLjU4Myw1LjU2MyAtMjAuNSwxNS4yNDIgLTIwLjUsMjcuNTg4IHYgMC4xNTMgYyAwLDEyLjI2OSA4Ljg0MSwyMS44NyAyMC42NTIsMjEuODcgNy4yNDEsMCAxMi4yNywtMy4wNDggMTYuNzY1LC03LjMxNSBsIDQuMTE2LDQuNDIgYyAtNS4zMzQsNS4wMyAtMTEuMTI2LDguNDU5IC0yMC44MDUsOC40NTkgLTE1LjY5OCwwIC0yNi45NzcsLTEyLjQ5NyAtMjYuOTc3LC0yNy41ODcgViAyNy40MzYgQyAtMjYuNzQ5LDEyLjExNyAtMTUuMzk0LDAgMCwwIG0gNTUuMDk5LDAgYyAxNi4yMzIsMCAyNy4yODMsMTIuODggMjcuMjgzLDI3LjU4OCB2IDAuMTUzIGMgMCwxNC43MDcgLTEwLjg5OSwyNy40MzQgLTI3LjEzMSwyNy40MzQgLTE2LjIzMiwwIC0yNy4yODMsLTEyLjg3OSAtMjcuMjgzLC0yNy41ODcgViAyNy40MzYgQyAyNy45NjgsMTIuNzI4IDM4Ljg2NywwIDU1LjA5OSwwIG0gMC4xNTIsNS41NjMgYyAtMTIuMTkzLDAgLTIxLjAzNCw5LjkwNyAtMjEuMDM0LDIyLjAyNSB2IDAuMTUzIGMgMCwxMi4xMTYgOC42ODgsMjEuODcgMjAuODgyLDIxLjg3IDEyLjE5MywwIDIxLjAzMywtOS45MDYgMjEuMDMzLC0yMi4wMjMgViAyNy40MzYgQyA3Ni4xMzIsMTUuMzE3IDY3LjQ0NSw1LjU2MyA1NS4yNTEsNS41NjMgTSA5NS4xMDcsMC45MTUgaCA1Ljg2OCBWIDQ0LjY1OCBMIDEzNS40MjEsMC45MTUgaCA0LjgwMSBWIDU0LjI2IGggLTUuODY4IFYgMTEuNTA3IEwgMTAwLjc0Nyw1NC4yNiBoIC01LjY0IHogbSA3OC40OTQsLTAuNzYyIGMgMTAuNTkyLDAgMTguMjEzLDUuOTQ0IDE4LjIxMywxNS4wODkgdiAwLjE1MyBjIDAsOC4xNTQgLTUuNDg2LDEyLjQ5OSAtMTcuMzc1LDE1LjA4OSAtMTEuNzM2LDIuNTE1IC0xNC40OCw1LjMzMyAtMTQuNDgsMTAuMzY0IFYgNDEgYyAwLDQuODAxIDQuNDIxLDguNjExIDExLjM1NSw4LjYxMSA1LjQ4OCwwIDEwLjQ0MSwtMS43NTMgMTUuMzk0LC01Ljc5MSBsIDMuNTA1LDQuNjQ5IGMgLTUuNDEsNC4zNDQgLTEwLjk3Myw2LjU1MyAtMTguNzQ3LDYuNTUzIC0xMC4xMzQsMCAtMTcuNTI3LC02LjE3MiAtMTcuNTI3LC0xNC41NTQgdiAtMC4xNTQgYyAwLC04Ljc2MyA1LjY0MSwtMTIuNzI2IDE3LjkwOSwtMTUuMzkzIDExLjIwMiwtMi4zNjMgMTMuODcsLTUuMTgzIDEzLjg3LC0xMC4xMzYgdiAtMC4xNTMgYyAwLC01LjI1OCAtNC43MjUsLTkuMDY5IC0xMS44ODgsLTkuMDY5IC03LjM5MiwwIC0xMi43MjcsMi41MTYgLTE4LjI5LDcuNTQ2IGwgLTMuNzM0LC00LjQyMSBjIDYuNDAxLC01LjcxNSAxMy4zMzYsLTguNTM1IDIxLjc5NSwtOC41MzUgbSA1MS44MjEsLTAuMDc3IGMgMTMuMzM3LDAgMjIuMjUzLDguMDc4IDIyLjI1MywyMy42MjUgViA1NC4yNiBoIC02LjAyIFYgMjMuMjQzIGMgMCwtMTEuNjU5IC02LjI0OSwtMTcuNjA0IC0xNi4wOCwtMTcuNjA0IC0xMC4xMzYsMCAtMTYuMzA5LDYuNDc4IC0xNi4zMDksMTcuOTg2IFYgNTQuMjYgaCAtNi4wMiBWIDIzLjI0MyBjIDAsLTE1LjA4OSA4Ljk5MywtMjMuMTY3IDIyLjE3NiwtMjMuMTY3IG0gMzYuNTAzLDAuODM5IGggMzYuMDQ3IFYgNi40NzkgSCAyNjcuOTQ2IFYgNTQuMjYgaCAtNi4wMjEgeiBtIDUzLjY1LDAgaCA2LjA5NyB2IDQ3Ljc4MSBoIDE3LjkwOSB2IDUuNTY0IGggLTQxLjkxNCB2IC01LjU2NCBoIDE3LjkwOCB6IG0gMjMuODUyLDAgaCA2LjE3NCBsIDYuMzI1LDE0LjA5OCBoIDI5LjAzNSBMIDM4Ny4yMSwwLjkxNSBoIDYuNDc4IGwgLTI0LjMxLDUzLjcyNyBIIDM2My43NCBaIE0gMzU0LjI4OSwyMC41IDM2Ni40ODMsNDcuNjMxIDM3OC41OTksMjAuNSBaIE0gNDA0LjIwNSwwLjkxNSBoIDUuODY4IFYgNDQuNjU4IEwgNDQ0LjUxOCwwLjkxNSBoIDQuODAyIFYgNTQuMjYgaCAtNS44NjggViAxMS41MDcgTCA0MDkuODQzLDU0LjI2IGggLTUuNjM4IHogbSA3NC4zMDIsMCBoIDYuMDk2IHYgNDcuNzgxIGggMTcuOTA5IHYgNS41NjQgaCAtNDEuOTE1IHYgLTUuNTY0IGggMTcuOTEgeiBtIDUyLjQzMSwtMC43NjIgYyAxMC41OTIsMCAxOC4yMTMsNS45NDQgMTguMjEzLDE1LjA4OSB2IDAuMTUzIGMgMCw4LjE1NCAtNS40ODYsMTIuNDk5IC0xNy4zNzUsMTUuMDg5IC0xMS43MzYsMi41MTUgLTE0LjQ4LDUuMzMzIC0xNC40OCwxMC4zNjQgViA0MSBjIDAsNC44MDEgNC40MjEsOC42MTEgMTEuMzU1LDguNjExIDUuNDg3LDAgMTAuNDQxLC0xLjc1MyAxNS4zOTQsLTUuNzkxIGwgMy41MDUsNC42NDkgYyAtNS40MSw0LjM0NCAtMTAuOTczLDYuNTUzIC0xOC43NDcsNi41NTMgLTEwLjEzNiwwIC0xNy41MjcsLTYuMTcyIC0xNy41MjcsLTE0LjU1NCB2IC0wLjE1NCBjIDAsLTguNzYzIDUuNjM5LC0xMi43MjYgMTcuOTA5LC0xNS4zOTMgMTEuMjAyLC0yLjM2MyAxMy44NywtNS4xODMgMTMuODcsLTEwLjEzNiB2IC0wLjE1MyBjIDAsLTUuMjU4IC00LjcyNSwtOS4wNjkgLTExLjg4OCwtOS4wNjkgLTcuMzkyLDAgLTEyLjcyOCwyLjUxNiAtMTguMjkxLDcuNTQ2IGwgLTMuNzMzLC00LjQyMSBjIDYuNCwtNS43MTUgMTMuMzM1LC04LjUzNSAyMS43OTUsLTguNTM1IgogICAgICAgICAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZSIKICAgICAgICAgICAgIGlkPSJwYXRoMzgiCiAgICAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPjwvZz48ZwogICAgICAgICAgIGlkPSJnNDAiCiAgICAgICAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDEyLjcxODcsMzk0LjI3MTUpIgogICAgICAgICAgIHN0eWxlPSJmaWxsOiNmZmZmZmYiPjxwYXRoCiAgICAgICAgICAgICBkPSJtIDAsMCBoIDIzLjcgYyAxMS42NjEsMCAxOS4zNTgsNS40MTEgMTkuMzU4LDE0LjU1NyB2IDAuMTUyIGMgMCw3LjMxNSAtNS4xMDYsMTAuOTc0IC0xMS40MzIsMTIuODc5IDQuMTkxLDEuODI4IDguNDU5LDUuNDExIDguNDU5LDEyLjM0NSB2IDAuMTUyIGMgMCwzLjQzIC0xLjIxOCw2LjI1IC0zLjQyOSw4LjUzNiAtMy4wNDksMi45NzIgLTcuODUsNC43MjUgLTEzLjk0Niw0LjcyNSBIIDAgWiBtIDMzLjk4OSwzOS4wOTUgYyAwLC02LjI0OSAtNS4wMzEsLTkuNTI2IC0xMi4yNjksLTkuNTI2IEggNS45NDMgdiAxOC4zNjcgaCAxNi4yMzQgYyA3LjYyMSwwIDExLjgxMiwtMy40MzEgMTEuODEyLC04LjY4OSB6IE0gMzYuOTYxLDE1LjA5IHYgLTAuMTUzIGMgMCwtNS45NDQgLTUuMDMsLTkuNTI2IC0xMy4xMDgsLTkuNTI2IEggNS45NDMgdiAxOC44MjQgaCAxNi44NDMgYyA5LjI5NywwIDE0LjE3NSwtMy4zNTQgMTQuMTc1LC05LjE0NSBNIDc2LjM1OSwtMC44MzggYyAxMy4zMzcsMCAyMi4yNTMsOC4wNzggMjIuMjUzLDIzLjYyNCB2IDMwLjU2IGggLTYuMDIgViAyMi4zMyBjIDAsLTExLjY2MSAtNi4yNDksLTE3LjYwNCAtMTYuMDgsLTE3LjYwNCAtMTAuMTM2LDAgLTE2LjMwOSw2LjQ3NyAtMTYuMzA5LDE3Ljk4NCB2IDMwLjYzNiBoIC02LjAyIFYgMjIuMzMgYyAwLC0xNS4wOSA4Ljk5MiwtMjMuMTY4IDIyLjE3NiwtMjMuMTY4IE0gMTEzLjM5NSwwIGggNi4wMjEgdiA1My4zNDYgaCAtNi4wMjEgeiBtIDIxLjY0MywwIGggMzYuMDQ1IHYgNS41NjMgaCAtMzAuMDI2IHYgNDcuNzgzIGggLTYuMDE5IHogbSA0Ny4xNzEsMCBoIDE4LjUxOSBjIDE2Ljc2NiwwIDI4LjM0OSwxMS42NTkgMjguMzQ5LDI2LjY3MyB2IDAuMTUzIGMgMCwxNS4wMTIgLTExLjU4MywyNi41MiAtMjguMzQ5LDI2LjUyIGggLTE4LjUxOSB6IG0gMTguNTE5LDQ3Ljc4MyBjIDEzLjQ4OCwwIDIyLjA5OSwtOS4yOTggMjIuMDk5LC0yMS4xMSB2IC0wLjE1MiBjIDAsLTExLjgxMiAtOC42MTEsLTIwLjk1OCAtMjIuMDk5LC0yMC45NTggSCAxODguMjMgdiA0Mi4yMiB6IE0gMjQyLjMzNywwIGggNi4wMjEgdiA1My4zNDYgaCAtNi4wMjEgeiBtIDIxLjY0MiwwIGggNS44NjggViA0My43NDMgTCAzMDQuMjkzLDAgaCA0LjgwMSB2IDUzLjM0NiBoIC01Ljg2OCBWIDEwLjU5NCBsIC0zMy42MDgsNDIuNzUyIGggLTUuNjM5IHogbSA4NC45NzEsLTAuOTE1IGMgOC45OTIsMCAxNi40NjEsMy43MzUgMjEuNDE1LDguMTU1IHYgMjEuMjYxIGggLTIyLjAyNCB2IC01LjQxIGggMTYuMjMyIFYgOS44MzEgYyAtMy42NTgsLTIuOTczIC05LjI5NywtNS4zMzUgLTE1LjM5NCwtNS4zMzUgLTEyLjk1NSwwIC0yMS4xMTEsOS40NSAtMjEuMTExLDIyLjE3NyB2IDAuMTUzIGMgMCwxMS44ODggOC40NjEsMjEuODcgMjAuMjczLDIxLjg3IDcuNTQ0LDAgMTIuMTE2LC0yLjUxMyAxNi4yMzIsLTYuMDk2IGwgMy44ODcsNC41NzMgYyAtNS4zMzUsNC40OTYgLTEwLjg5OCw3LjA4NyAtMTkuODkyLDcuMDg3IC0xNi4wMDIsMCAtMjYuNzQ4LC0xMi45NTUgLTI2Ljc0OCwtMjcuNTg3IHYgLTAuMTUyIGMgMCwtMTUuMjQyIDEwLjM2NSwtMjcuNDM2IDI3LjEzLC0yNy40MzYiCiAgICAgICAgICAgICBzdHlsZT0iZmlsbDojZmZmZmZmO2ZpbGwtb3BhY2l0eToxO2ZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpub25lIgogICAgICAgICAgICAgaWQ9InBhdGg0MiIKICAgICAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiIC8+PC9nPjxnCiAgICAgICAgICAgaWQ9Imc0NCIKICAgICAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0NTguNDQzNCw0NzUuMzQzMykiPjxwYXRoCiAgICAgICAgICAgICBkPSJtIDAsMCAtNy40NjgsNy41NDMgYyAtNC4xOTEsLTMuODA4IC03LjkyNiwtNi4yNDggLTE0LjAyMiwtNi4yNDggLTkuMTQ2LDAgLTE1LjQ3MSw3LjYyMSAtMTUuNDcxLDE2Ljc2NyB2IDAuMTUyIGMgMCw5LjE0NCA2LjQ3OCwxNi42MTMgMTUuNDcxLDE2LjYxMyA1LjMzMywwIDkuNTI2LC0yLjI4NiAxMy42NDEsLTYuMDIxIGwgNy40NjksOC42MTMgYyAtNC45NTUsNC44NzYgLTEwLjk3NCw4LjIyOSAtMjEuMDM1LDguMjI5IC0xNi4zODQsMCAtMjcuODE1LC0xMi40MjEgLTI3LjgxNSwtMjcuNTg2IHYgLTAuMTUzIGMgMCwtMTUuMzE5IDExLjY2LC0yNy40MzUgMjcuMzU4LC0yNy40MzUgMTAuMjg4LDAgMTYuMzg0LDMuNjU4IDIxLjg3Miw5LjUyNiBtIDYyLjE4NSwxOC4wNjIgdiAwLjE1MiBjIDAsMTUuMTY1IC0xMS44MTEsMjcuNDM0IC0yOC4yNzIsMjcuNDM0IC0xNi40NjEsMCAtMjguNDI1LC0xMi40MjEgLTI4LjQyNSwtMjcuNTg2IHYgLTAuMTUzIGMgMCwtMTUuMTY2IDExLjgxMSwtMjcuNDM1IDI4LjI3MywtMjcuNDM1IDE2LjQ2LDAgMjguNDI0LDEyLjQyMiAyOC40MjQsMjcuNTg4IE0gNDkuOTE2LDE3LjkwOSBjIDAsLTkuMTQ1IC02LjU1NCwtMTYuNjE0IC0xNi4wMDMsLTE2LjYxNCAtOS40NSwwIC0xNi4xNTYsNy42MjEgLTE2LjE1NiwxNi43NjcgdiAwLjE1MiBjIDAsOS4xNDQgNi41NTQsMTYuNjEzIDE2LjAwNCwxNi42MTMgOS40NDksMCAxNi4xNTUsLTcuNjIxIDE2LjE1NSwtMTYuNzY1IHogbSA3MC4xMTEsLTI2LjUyIFYgNDQuNzM0IEggMTA4LjQ0MyBWIDExLjg4OSBMIDgzLjQ0OCw0NC43MzQgSCA3Mi42MjYgViAtOC42MTEgSCA4NC4yMSB2IDMzLjkxMiBsIDI1LjgzNCwtMzMuOTEyIHogbSA1MS4zNjQsMTUuNzc0IHYgMC4xNTMgYyAwLDkuMjk4IC02LjA5OCwxMy4xODQgLTE2LjkxOSwxNi4wMDQgLTkuMjIxLDIuMzYzIC0xMS41MDcsMy41MDUgLTExLjUwNyw3LjAxMSB2IDAuMTUyIGMgMCwyLjU5MSAyLjM2Myw0LjY0OSA2Ljg1OCw0LjY0OSA0LjQ5NiwwIDkuMTQ3LC0xLjk4MSAxMy44NywtNS4yNTggbCA2LjA5OCw4Ljg0IGMgLTUuNDExLDQuMzQzIC0xMi4wNDIsNi43ODIgLTE5LjgxNCw2Ljc4MiAtMTAuODk4LDAgLTE4LjY3MSwtNi40MDEgLTE4LjY3MSwtMTYuMDggdiAtMC4xNTIgYyAwLC0xMC41OTMgNi45MzQsLTEzLjU2NSAxNy42NzksLTE2LjMwOCA4LjkxNywtMi4yODcgMTAuNzQ2LC0zLjgxIDEwLjc0NiwtNi43ODMgViA2LjAyMSBjIDAsLTMuMTI1IC0yLjg5NiwtNS4wMzEgLTcuNjk3LC01LjAzMSAtNi4wOTcsMCAtMTEuMTI3LDIuNTE1IC0xNS45MjgsNi40NzggbCAtNi45MzUsLTguMzA2IGMgNi40MDEsLTUuNzE2IDE0LjU1NywtOC41MzYgMjIuNjM1LC04LjUzNiAxMS41MDYsMCAxOS41ODUsNS45NDQgMTkuNTg1LDE2LjUzNyBNIDIyMC44NSwzMy45MTIgViA0NC43MzQgSCAxNzYuNjQ5IFYgMzMuOTEyIGggMTYuMjMyIFYgLTguNjExIGggMTEuNzM2IHYgNDIuNTIzIHogbSA1NS4wOTgsLTQyLjUyMyAtMTMuMDMxLDE5LjA1MiBjIDYuNzgxLDIuNTE1IDExLjQzMSw3LjkyNiAxMS40MzEsMTYuNTM3IHYgMC4xNTIgYyAwLDEwLjk3NCAtNy41NDUsMTcuNjA0IC0yMC4xMTksMTcuNjA0IEggMjI5Ljg0MSBWIC04LjYxMSBoIDExLjczNiBWIDguNDU4IGggOS4yMjIgbCAxMS40MywtMTcuMDY5IHogbSAtMTMuNDg5LDM0Ljk3OSBjIDAsLTQuNDk2IC0zLjI3NywtNy41NDUgLTguOTkzLC03LjU0NSBoIC0xMS44ODkgdiAxNS4zMTggaCAxMS42NjEgYyA1LjcxNiwwIDkuMjIxLC0yLjU5IDkuMjIxLC03LjYyIHogbSA2OC4xMjksLTExLjczNiB2IDMwLjEwMiBoIC0xMS43MzYgdiAtMzAuNTYgYyAwLC04LjQ1OSAtNC4zNDMsLTEyLjgwMiAtMTEuNTA3LC0xMi44MDIgLTcuMTYzLDAgLTExLjUwOCw0LjQ5NiAtMTEuNTA4LDEzLjE4NCBWIDQ0LjczNCBIIDI4NC4xMDMgViAxNC4yNTEgYyAwLC0xNS42OTkgOC43NjMsLTIzLjcgMjMuMDg5LC0yMy43IDE0LjMyOCwwIDIzLjM5Niw3LjkyNCAyMy4zOTYsMjQuMDgxIE0gMzg5LjQyMSwwIDM4MS45NTIsNy41NDMgYyAtNC4xOTEsLTMuODA4IC03LjkyNiwtNi4yNDggLTE0LjAyMSwtNi4yNDggLTkuMTQ3LDAgLTE1LjQ3LDcuNjIxIC0xNS40NywxNi43NjcgdiAwLjE1MiBjIDAsOS4xNDQgNi40NzYsMTYuNjEzIDE1LjQ3LDE2LjYxMyA1LjMzNSwwIDkuNTI1LC0yLjI4NiAxMy42NCwtNi4wMjEgbCA3LjQ2OSw4LjYxMyBjIC00Ljk1Myw0Ljg3NiAtMTAuOTc0LDguMjI5IC0yMS4wMzQsOC4yMjkgLTE2LjM4NSwwIC0yNy44MTcsLTEyLjQyMSAtMjcuODE3LC0yNy41ODYgdiAtMC4xNTMgYyAwLC0xNS4zMTkgMTEuNjYyLC0yNy40MzUgMjcuMzYxLC0yNy40MzUgMTAuMjg3LDAgMTYuMzg1LDMuNjU4IDIxLjg3MSw5LjUyNiBtIDQ5Ljc2NCwzMy45MTIgViA0NC43MzQgSCAzOTQuOTgzIFYgMzMuOTEyIGggMTYuMjMzIFYgLTguNjExIGggMTEuNzM2IHYgNDIuNTIzIHogbSAyMS4yNiwxMC44MjIgSCA0NDguNzA5IFYgLTguNjEyIGggMTEuNzM2IHogbSA2Mi4yNjIsMCBIIDUxMC4wNTggTCA0OTYuMTExLDcuMTYzIDQ4Mi4xNjUsNDQuNzM0IEggNDY5LjIwOSBMIDQ5MC43NzYsLTguOTkzIEggNTAxLjE0IFogTSA1NzEuNTU4LC04LjYxMSBWIDEuODMgaCAtMjguOTYgdiAxMS4yMDEgaCAyNS4xNDkgdiAxMC40NDEgaCAtMjUuMTQ5IHYgMTAuODIxIGggMjguNTc4IFYgNDQuNzM0IEggNTMwLjkzNyBWIC04LjYxMSBaIgogICAgICAgICAgICAgc3R5bGU9ImZpbGw6IzliMDAyZDtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZSIKICAgICAgICAgICAgIGlkPSJwYXRoNDYiCiAgICAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPjwvZz48L2c+PC9nPjwvZz48L3N2Zz4=" style="height:120px;width:auto;" alt="CBC Logo">
+</div>
+<div id="cur"></div>
+<div id="cur-r"></div>
+<div class="noise"></div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+ <div class="hero-bg"></div>
+ <div class="hero-grid-lines"></div>
+ <div class="hero-inner">
+ <div class="pre-tag">// Now Hiring &mdash; Perth, Western Australia</div>
+ <h1 class="hero-name">Structural<br><span>Engineer.</span></h1>
+ <p class="hero-sub">We&rsquo;re a Perth structural engineering and building surveying consultancy looking for a structural engineer who loves the technical work &mdash; someone who wants to focus on doing great residential design, build real depth, and grow steadily within a small, experienced team.</p>
+ <div class="hero-chips">
+ <div class="chip">Residential Focus</div>
+ <div class="chip warm">Mentored Growth</div>
+ <div class="chip mid">Varied Workload</div>
+ <div class="chip">WFH Flexibility</div>
+ </div>
+ </div>
+ <div class="scroll-hint"><div class="s-line"></div><span>Read the details</span></div>
+</section>
+
+<!-- ABOUT CBC -->
+<section class="about-sec" id="about">
+ <div class="sec-inner">
+ <div class="sec-tag reveal">// The Business</div>
+ <h2 class="sec-title reveal">Build Your<br>Craft At CBC.</h2>
+ <div class="about-grid reveal">
+ <div class="about-body">
+ <p>Constructive Building Consultants is a Perth-based structural engineering and building surveying consultancy with two divisions, one team, and both founders still deeply in the work.</p>
+ <p>CBC has grown on referral and reputation, with a residential pipeline that&rsquo;s steady, varied, and genuinely interesting &mdash; not the same product type repeated endlessly. New builds, multi-storey homes, renovations, additions, retaining structures, swimming pools.</p>
+ <p>What we need is a structural engineer who wants to do the work well, every day, learn from the senior engineers, and grow with the business over time. No leadership pressure, no business development expectations &mdash; just solid technical work in a professional environment.</p>
+ </div>
+ <div class="stat-stack">
+ <div class="stat-block">
+ <div class="stat-label">Residential Pipeline</div>
+ <div class="stat-val">Steady</div>
+ <div class="stat-desc">A consistent, varied flow of residential projects across Perth and WA. You&rsquo;ll see depth, not repetition.</div>
+ </div>
+ <div class="stat-block">
+ <div class="stat-label">Team Size</div>
+ <div class="stat-val warm">24</div>
+ <div class="stat-desc">A small, experienced team. Direct access to senior engineers and both founding directors when you need them.</div>
+ </div>
+ <div class="stat-block">
+ <div class="stat-label">Reporting Line</div>
+ <div class="stat-val">Senior Eng.</div>
+ <div class="stat-desc">Reports to the Senior Structural Engineer and the Director of Structural Engineering. Mentorship is part of the role.</div>
+ </div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- WHAT YOU'LL DO -->
+<section class="role-sec" id="role">
+ <div class="sec-inner">
+ <div class="sec-tag reveal">// The Role</div>
+ <h2 class="sec-title reveal">What You&rsquo;ll<br>Actually Do.</h2>
+ <p class="sec-intro reveal">A clear, focused engineering role. Here&rsquo;s the real scope of the work, no fluff.</p>
+ <div class="role-grid reveal">
+ <div class="role-card">
+ <div class="role-num">01</div>
+ <div class="role-icon">📐</div>
+ <div class="role-title">Residential Design &amp; Analysis</div>
+ <div class="role-body">Prepare structural designs, mark-ups, and preliminary layouts for residential projects to a high standard of accuracy. Produce structural analysis, calculations, and engineering documentation suitable for senior review. The technical work is the heart of the role.</div>
+ </div>
+ <div class="role-card">
+ <div class="role-num">02</div>
+ <div class="role-icon">🏗️</div>
+ <div class="role-title">Site Inspections &amp; Reports</div>
+ <div class="role-body">Conduct site visits, structural inspections, construction compliance inspections, reinforcement inspections, compaction testing, and dilapidation surveys. Produce reports and certificates as required. You&rsquo;ll be on-site regularly, not just at a desk.</div>
+ </div>
+ <div class="role-card">
+ <div class="role-num">03</div>
+ <div class="role-icon">📋</div>
+ <div class="role-title">Project Workflow</div>
+ <div class="role-body">Organise your assigned workflow with self-initiative, meeting timeframes and client expectations. Coordinate with drafters, builders, and consultants. Apply NCC, Australian Standards, and WA regulatory requirements. Escalate sensibly when matters fall outside your scope.</div>
+ </div>
+ <div class="role-card">
+ <div class="role-num">04</div>
+ <div class="role-icon">💬</div>
+ <div class="role-title">Client Communication</div>
+ <div class="role-body">Maintain client relationships on assigned jobs through effective, commercially aware communication. Respond to client requirements, update on progress, handle queries within scope, and escalate fee or scope matters to senior engineers as appropriate.</div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- PHASES -->
+<section class="phase-sec" id="phases">
+ <div class="sec-inner">
+ <div class="sec-tag reveal">// How You Grow</div>
+ <h2 class="sec-title reveal">A Real Path.<br>No Pressure.</h2>
+ <p class="sec-intro reveal">There&rsquo;s a clear pathway if you want to step up; and no pressure if you don&rsquo;t. Strong technical contributors are valued here, full stop.</p>
+ <div class="phases reveal">
+ <div class="phase">
+ <div class="phase-num">01</div>
+ <div class="phase-period">Right Now</div>
+ <div class="phase-title">Structural Engineer</div>
+ <div class="phase-body">Deliver reliable residential design output under senior guidance. Build depth across CBC&rsquo;s residential project types: new builds, single and multi-storey homes, renovations, additions, retaining structures, swimming pools. Inspections and reports as part of the rhythm.</div>
+ </div>
+ <div class="phase">
+ <div class="phase-num">02</div>
+ <div class="phase-period">As Experience Builds</div>
+ <div class="phase-title">Increasing Autonomy</div>
+ <div class="phase-body">Take on more complex residential jobs with less supervision. Optional exposure to commercial and industrial work as your judgement and confidence build. Begin informally supporting graduate engineers if it&rsquo;s a direction you enjoy. Work toward Chartered Professional Engineer status if you choose.</div>
+ </div>
+ <div class="phase">
+ <div class="phase-num">03</div>
+ <div class="phase-period">Down The Track</div>
+ <div class="phase-title">Senior Structural Engineer</div>
+ <div class="phase-body">For those who develop the technical depth, client capability, and consistency to step up there is a clear pathway to Senior Engineer. Equally, there&rsquo;s no pressure to chase the leadership track. The role can sit comfortably at this level long-term if that&rsquo;s where you do your best work.</div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- PACKAGE -->
+<section class="package-sec" id="package">
+ <div class="sec-inner">
+ <div class="sec-tag reveal">// The Package</div>
+ <h2 class="sec-title reveal">What&rsquo;s On<br>The Table.</h2>
+ <p class="sec-intro reveal">Click any card to expand. We&rsquo;ll talk specifics when we meet &mdash; here&rsquo;s the shape of it.</p>
+ <div class="pack-grid reveal">
+ <div class="pack-card" data-pack>
+ <div class="pack-icon">💰</div>
+ <div class="pack-label">Base Salary</div>
+ <div class="pack-value">Competitive</div>
+ <div class="pack-desc">Exceeding industry standards. Plus superannuation. Commensurate with experience.</div>
+ <div class="expand-hint">▾ Click to expand</div>
+ <div class="pack-detail"><div class="pack-detail-inner">We pay above the WA residential market for this level. We&rsquo;d rather have a conversation about what the right package looks like for the right person than advertise a number. Bring your experience to the table and we&rsquo;ll meet it properly.</div></div>
+ </div>
+ <div class="pack-card" data-pack>
+ <div class="pack-icon">🧠</div>
+ <div class="pack-label">Mentorship</div>
+ <div class="pack-value warm">Direct</div>
+ <div class="pack-desc">Day-to-day access to senior engineers and both founding directors.</div>
+ <div class="expand-hint">▾ Click to expand</div>
+ <div class="pack-detail"><div class="pack-detail-inner">This isn&rsquo;t a place where you get handed a file and left alone with it. Senior engineers are accessible, the directors are in the work, and there&rsquo;s real time spent supporting how you develop. If you want to work toward Chartered status, we&rsquo;ll back that. If you want to deepen technically, the people to learn from are sitting nearby.</div></div>
+ </div>
+ <div class="pack-card wide" data-pack>
+ <div class="pack-icon">🏘️</div>
+ <div class="pack-label">The Work Itself</div>
+ <div class="pack-value">Varied Residential</div>
+ <div class="pack-desc">New builds, multi-storey homes, renovations, retaining, pools. Real variety, all residential.</div>
+ <div class="expand-hint">▾ Click to expand</div>
+ <div class="pack-detail"><div class="pack-detail-inner">CBC&rsquo;s residential scope covers single and multi-storey new builds, renovations and additions, retaining structures, swimming pools, and more bespoke residential projects. It&rsquo;s a steady, varied workload &mdash; not a single product type repeated endlessly. You&rsquo;ll see breadth across timber, steel, and concrete, and across different builder and client types operating in Perth and WA.</div></div>
+ </div>
+ <div class="pack-card" data-pack>
+ <div class="pack-icon">🏖️</div>
+ <div class="pack-label">Leave &amp; Flexibility</div>
+ <div class="pack-value" style="font-size:34px;margin-bottom:10px;">Open</div>
+ <div class="pack-desc">Annual leave, WFH days for design work and reports &mdash; managed professionally, not by policy.</div>
+ <div class="expand-hint">▾ Click to expand</div>
+ <div class="pack-detail"><div class="pack-detail-inner">We want the work done well &mdash; we don&rsquo;t need to watch you do it. WFH days for report writing and design work are practical and supported. Leave can be discussed properly. If you have something specific in mind, raise it upfront. We&rsquo;d rather sort it now than have it become friction later.</div></div>
+ </div>
+ <div class="pack-card" data-pack>
+ <div class="pack-icon">📈</div>
+ <div class="pack-label">Career Pathway</div>
+ <div class="pack-value" style="font-size:30px;margin-bottom:10px;">Real</div>
+ <div class="pack-desc">Clear pathway to Senior Engineer for those who want it &mdash; and no pressure if you don&rsquo;t.</div>
+ <div class="expand-hint">▾ Click to expand</div>
+ <div class="pack-detail"><div class="pack-detail-inner">CBC is founder-led and the founders take development seriously. As your technical depth and consistency build, the pathway to Senior Structural Engineer is genuinely open. Equally, strong technical contributors who want to stay focused on doing the work well are valued here. Both tracks are real and respected.</div></div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- WHY CBC -->
+<section class="why-sec" id="why">
+ <div class="sec-inner">
+ <div class="sec-tag reveal">// Why This Role</div>
+ <h2 class="sec-title reveal">Why This Is<br>Worth Looking At.</h2>
+ <p class="sec-intro reveal">If you&rsquo;ve got a couple of years under your belt and you love the technical side of structural engineering, here&rsquo;s why this one is different.</p>
+ <div class="why-grid reveal">
+ <div class="why-card">
+ <div class="why-num">01</div>
+ <div class="why-icon">🧱</div>
+ <div class="why-title">The Work Is Varied</div>
+ <div class="why-body">CBC&rsquo;s residential pipeline covers genuinely different project types, materials, and client situations. You won&rsquo;t be grinding the same calculation on the same product day after day. There&rsquo;s real depth to build here.</div>
+ </div>
+ <div class="why-card">
+ <div class="why-num">02</div>
+ <div class="why-icon">👥</div>
+ <div class="why-title">Senior Engineers Are Close</div>
+ <div class="why-body">At 24 people, with two divisions and the founders still in the work, you&rsquo;re never far from someone you can learn from. No filtering through layers of management. Just engineers helping engineers do the work properly.</div>
+ </div>
+ <div class="why-card">
+ <div class="why-num">03</div>
+ <div class="why-icon">🎯</div>
+ <div class="why-title">Realistic Expectations</div>
+ <div class="why-body">No BD targets, no chasing leadership before you&rsquo;re ready, no clock-watching. Focus on the technical work, do it well, and grow at your own pace. That&rsquo;s the whole brief.</div>
+ </div>
+ </div>
+ </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+ <div class="cta-title reveal">Interested?<br>Let&rsquo;s Talk.</div>
+ <p class="cta-body reveal">If you&rsquo;ve got 2+ years of residential structural experience, we&rsquo;d like to hear from you. No recruiters, no layers, just a direct conversation.</p>
+ <div class="cta-contact reveal">
+ <a href="mailto:careers@constructivebc.com.au" class="cta-btn">Get In Touch</a>
+ </div>
+ <div class="cta-sig reveal" style="margin-top:32px;">Constructive Building Consultants &mdash; Perth, Western Australia</div>
+</section>
+
+<script>
+const cur=document.getElementById('cur'),cr=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function a(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(a);})();
+document.querySelectorAll('[data-pack],.phase,.why-card,.role-card').forEach(el=>{
+ el.addEventListener('mouseenter',()=>{cr.style.width='52px';cr.style.height='52px';cr.style.borderColor='rgba(155,0,45,0.9)';});
+ el.addEventListener('mouseleave',()=>{cr.style.width='32px';cr.style.height='32px';cr.style.borderColor='rgba(155,0,45,0.5)';});
+});
+const obs=new IntersectionObserver(e=>e.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+document.querySelectorAll('[data-pack]').forEach(card=>{
+ card.addEventListener('click',()=>{
+ const was=card.classList.contains('open');
+ document.querySelectorAll('[data-pack]').forEach(c=>{c.classList.remove('open');c.querySelector('.expand-hint').textContent='▾ Click to expand';});
+ if(!was){card.classList.add('open');card.querySelector('.expand-hint').textContent='▴ Close';}
+ });
+});
+</script>
+
+</body>
+</html>
